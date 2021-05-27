@@ -7,7 +7,6 @@
 		</div>
 	</div>
 	<div class="row justify-content-center">
-		@foreach($posts as $post)
 
 		<div class="col-md-3">
 			<div class="card">
@@ -17,20 +16,12 @@
 					{{$post->content}}
 					<div>
 						<a href="{{route('admin.posts.edit', ['post' => $post->id])}}">Edit</a>
-					</div>
-					<div>
-						<a href="{{route('admin.posts.show', ['post' => $post->id])}}">Info</a>
-					</div>
-						<form action="{{route('admin.posts.destroy', compact('post'))}}" method="post">
-							@csrf
-							@method('DELETE')
-							<input type="submit" value="Deleate">
-						</form>
 
+
+					</div>
 				</div>
 			</div>
 		</div>
-		@endforeach
 	</div>
 </div>
 @endsection
