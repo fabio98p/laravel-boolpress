@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function show(string $slug){
+    public function show(string $slug)
+    {
         $post = Post::where('slug', '=', $slug)->first();
         return view('guest.post.show', compact('post'));
     }
