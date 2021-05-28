@@ -7,6 +7,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 
 class PostController extends Controller
@@ -66,7 +67,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.posts.show', compact('post'));
+        $category = (category::where('id', '=', $post->category_id)->first())->name;
+        return view('admin.posts.show', compact('post', 'category'));
     }
 
     /**

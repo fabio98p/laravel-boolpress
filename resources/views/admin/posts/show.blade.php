@@ -14,6 +14,8 @@
 
 				<div class="card-body">
 					{{$post->content}}
+					<div>catetory: {{$category}}
+					</div>
 					<div>
 						<a href="{{route('admin.posts.edit', ['post' => $post->id])}}">Edit</a>
 
