@@ -24,6 +24,17 @@
 			<form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="post">
 				@csrf
 				@method('PATCH')
+				
+				<div class="form-group">
+					<label for="category">Category</label>
+					<select class="form-control" id='category' name='category_id'>
+						<option value="">Select</option>
+						@foreach($categories as $category)
+						<option value="{{$category->id}}">{{$category->name}}</option>
+						@endforeach
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label for="title">Title</label>
 					<input class="form-control" id='title' type="text" name='title' value='{{old("title", $post->title)}}'>
