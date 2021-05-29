@@ -4,6 +4,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<a href="{{route('admin.posts.create')}}">Nuovo post</a>
+			<a href="{{route('admin.categories.index')}}">Vedi le categorie</a>
 		</div>
 	</div>
 	<div class="row justify-content-center">
@@ -24,12 +25,11 @@
 					<div>
 						<a href="{{route('admin.posts.show', ['post' => $post->id])}}">Info</a>
 					</div>
-						<form action="{{route('admin.posts.destroy', compact('post'))}}" method="post">
-							@csrf
-							@method('DELETE')
-							<input type="submit" value="Deleate">
-						</form>
-
+					<form action="{{route('admin.posts.destroy', compact('post'))}}" method="post">
+						@csrf
+						@method('DELETE')
+						<input type="submit" value="Deleate">
+					</form>
 				</div>
 			</div>
 		</div>

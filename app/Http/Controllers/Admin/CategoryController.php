@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,8 +19,7 @@ class PostController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts', 'categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -31,8 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.categories.create');
     }
 
     /**
@@ -44,80 +41,76 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'exists:categories,id|nullable',
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'name' => 'required|string|max:255',
         ]);
         $data = $request->all();
         
-        $post = new Post();
-        $post->fill($data);
+        $category = new Category();
+        $category->fill($data);
         
         
-        $post->slug = $this->generateSlug($post->title);
-        $post->save();
+        $category->slug = $this->generateSlug($category->name);
+        $category->save();
 
-        return redirect(route('admin.posts.index'));
+        return redirect(route('admin.categories.index'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Category $category)
     {
-        return view('admin.posts.show', compact('post'));
+        return view('admin.categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Category $category)
     {
-        $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Category $category)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string'
+            'name' => 'required|string|max:255',
         ]);
 
         $data = $request->all();
 
-        if ($post->title != $data['title']) {
-            $data['slug'] = $this->generateSlug($data['title']);
+        if ($category->title != $data['name']) {
+            $data['slug'] = $this->generateSlug($data['name']);
         }
 
-        $post->update($data);
+        $category->update($data);
 
-        return redirect(route('admin.posts.index'));
+        return redirect(route('admin.categories.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Post  $post
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Category $category)
     {
-        $post->delete();
-        return redirect(route('admin.posts.index'));
+        $category->delete();
+        return redirect(route('admin.categories.index'));
     }
 
     private function generateSlug(string $title) {
@@ -135,4 +128,3 @@ class PostController extends Controller
         return $slug;
     }
 }
-
