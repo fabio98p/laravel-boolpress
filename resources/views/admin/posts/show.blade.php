@@ -17,6 +17,7 @@
 					@if($post->category_id)
 					<div>catetory: {{$post->category->name}}</div>
 					@endif
+					<img src="{{asset($post->cover)}}" alt="{{$post->title}}">
 					<div>
 						<a href="{{route('admin.posts.edit', ['post' => $post->id])}}">Edit</a>
 
