@@ -5,6 +5,7 @@
 		<div class="col-md-12">
 			<a href="{{route('admin.posts.create')}}">Nuovo post</a>
 			<a href="{{route('admin.categories.index')}}">Vedi le categorie</a>
+			<a href="{{route('admin.tags.index')}}">Vedi i tag</a>
 		</div>
 	</div>
 	<div class="row justify-content-center">
