@@ -13,9 +13,14 @@ class Post extends Model
         'cover',
         'category_id'
     ];
-
+    
     public function category()
     {
        return $this->belongsTo('App\Category');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
     }
 }

@@ -18,6 +18,9 @@
                     @if($post->category_id)
                     <div>catetory: {{$post->category->name}}</div>
                     @endif
+                    @foreach($post->tags as $tag)
+					<a href="#">#{{$tag->name}}</a>
+					@endforeach
                     <div>
                         <a href="{{route('posts.show', ['post' => $post->slug])}}">Info</a>
                     </div>

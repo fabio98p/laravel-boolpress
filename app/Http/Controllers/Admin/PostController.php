@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Category;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,7 +23,8 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $posts = Post::all();
-        return view('admin.posts.index', compact('posts', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.index', compact('posts', 'categories', 'tags'));
     }
 
     /**
@@ -33,7 +35,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -48,22 +52,27 @@ class PostController extends Controller
             'category_id' => 'exists:categories,id|nullable',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'cover' => 'image|max:5000|nullable'
+            'cover' => 'image|max:5000|nullable',
+            'tag_ids.*' => 'exists:tags,id',
         ]);
         $data = $request->all();
-        
+
         $cover = NULL;
         if (array_key_exists('cover', $data)) {
             $cover = Storage::put('uploads', $data['cover']);
         }
-        
+
         $post = new Post();
         $post->fill($data);
-        
-        
+
+
         $post->slug = $this->generateSlug($post->title);
-        $post->cover = 'storage/'.$cover;
+        $post->cover = 'storage/' . $cover;
         $post->save();
+
+        if (array_key_exists('tag_ids', $data)) {
+            $post->tags()->attach($data['tag_ids']);
+        }
 
         return redirect(route('admin.posts.index'));
     }
@@ -88,7 +97,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -101,23 +112,30 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $request->validate([
+            'category_id' => 'exists:categories,id|nullable',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'cover' => 'image|max:5000|nullable'
+            'cover' => 'image|max:5000|nullable',
+            'tag_ids' => 'exists:tags,id',
         ]);
 
         $data = $request->all();
         $cover = NULL;
-        
+
         if ($post->title != $data['title']) {
             $data['slug'] = $this->generateSlug($data['title']);
         }
-        
+
         if (array_key_exists('cover', $data)) {
             $cover = Storage::put('uploads', $data['cover']);
-            $data['cover'] = 'storage/'.$cover;
+            $data['cover'] = 'storage/' . $cover;
         }
         $post->update($data);
+        if (array_key_exists('tag_ids', $data)) {
+            $post->tags()->sync($data['tag_ids']);
+        } else {
+            $post->tags()->detach();
+        }
 
         return redirect(route('admin.posts.index'));
     }
@@ -134,19 +152,19 @@ class PostController extends Controller
         return redirect(route('admin.posts.index'));
     }
 
-    private function generateSlug(string $title) {
+    private function generateSlug(string $title)
+    {
         $slug = Str::slug($title, '-');
         $slug_base = $slug;
         $contatore = 1;
-    
+
         $post_with_slug = post::where('slug', '=', $slug)->first();
         while ($post_with_slug) {
             $slug = $slug_base . '-' . $contatore;
             $contatore++;
-    
+
             $post_with_slug = post::where('slug', '=', $slug)->first();
         }
         return $slug;
     }
 }
-

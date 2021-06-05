@@ -112,7 +112,7 @@ class TagController extends Controller
         return redirect(route('admin.tags.index'));
     }
 
-    private function generateSlug(string $title) {
+        private function generateSlug(string $title) {
         $slug = Str::slug($title, '-');
         $slug_base = $slug;
         $contatore = 1;

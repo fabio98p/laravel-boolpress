@@ -35,6 +35,15 @@
 					</select>
 				</div>
 
+				<div class="form-group">
+					<label for="tag">tag</label>
+					<select class="form-control" id='tag' name='tag_ids[]' multiple="multiple">
+						@foreach($tags as $tag)
+						<option value="{{$tag->id}}" {{$tag->id == old('tag_id') ? 'selected' : ''}}>{{$tag->name}}</option>
+						@endforeach
+					</select>
+				</div>
+
 
 				<div class="form-group">
 					<label for="title">Title</label>

@@ -20,6 +20,10 @@
 					@if($post->category_id)
 					<div>catetory: {{$post->category->name}}</div>
 					@endif
+					<h4>tags:</h4>
+					@foreach($post->tags as $tag)
+					<a href="#">#{{$tag->name}}</a>
+					@endforeach
 					<div>
 						<a href="{{route('admin.posts.edit', ['post' => $post->id])}}">Edit</a>
 					</div>
