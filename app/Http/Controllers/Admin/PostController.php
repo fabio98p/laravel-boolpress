@@ -6,6 +6,8 @@ use App\Post;
 use App\Category;
 use App\Tag;
 use App\Http\Controllers\Controller;
+use App\Mail\SendNewMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +75,8 @@ class PostController extends Controller
         if (array_key_exists('tag_ids', $data)) {
             $post->tags()->attach($data['tag_ids']);
         }
+
+        Mail::to('ricevitore@dio.it')->send(new SendNewMail());
 
         return redirect(route('admin.posts.index'));
     }
